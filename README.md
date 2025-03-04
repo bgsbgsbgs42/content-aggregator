@@ -1,202 +1,282 @@
 # Content Aggregator
 
-A powerful Python-based content aggregator tool with web interface, NLP capabilities, and adaptive scraping.
+A powerful all-in-one Python tool that combines content collection, natural language processing, deduplication, adaptive web scraping, and a comprehensive command-line interface.
 
 ## Features
 
-### Core Functionality
-- **Content Collection**: Aggregate content from various sources (RSS feeds and webpages)
-- **Smart Filtering**: Filter content by categories, keywords, sentiment, and more
-- **Export Options**: Export content in JSON, CSV, or HTML formats
+### Content Collection
+- **RSS Feed Support**: Automatically fetch and parse articles from RSS feeds
+- **Adaptive Web Scraping**: Extract content from websites with self-improving techniques
+- **Source Management**: Configure and manage multiple content sources
+- **Rate Limiting**: Respectful scraping with configurable rate limits
+- **Robots.txt Compliance**: Respect website scraping policies
 
-### NLP Capabilities
-- **Sentiment Analysis**: Categorize content as positive, negative, or neutral
-- **Topic Modeling**: Automatically identify and tag main topics
-- **Text Summarization**: Generate concise summaries of longer articles
+### Natural Language Processing
+- **Sentiment Analysis**: Analyze and categorize content by sentiment (positive, neutral, negative)
+- **Topic Modeling**: Extract and identify key topics within content
+- **Text Summarization**: Automatically generate concise summaries
+- **Keyword Filtering**: Focus on content matching specific keywords or topics
 
 ### Content Deduplication
-- **Exact Duplicate Detection**: Identify and filter duplicate content
-- **Similarity Grouping**: Group similar articles from different sources
-- **Customizable Thresholds**: Configure similarity sensitivity
+- **Exact Duplicate Detection**: Identify and filter exact content duplicates
+- **Similarity Grouping**: Group similar articles together
+- **Content Fingerprinting**: Generate content hashes for efficient comparison
+- **Configurable Thresholds**: Adjust similarity detection sensitivity
 
 ### Adaptive Scraping
-- **Self-Healing Scraper**: Adapt to website changes automatically
-- **Pattern Learning**: Continuously improve content extraction
-- **Ethical Web Crawling**: Respect robots.txt and implement rate limiting
+- **Self-healing Extraction**: Automatically recover from failed extraction attempts
+- **Selector Learning**: Improve extraction patterns over time
+- **Pattern Discovery**: Automatically discover new extraction patterns
+- **Extraction Quality Assessment**: Evaluate the quality of extracted content
+- **Machine Learning Integration**: Train models to improve extraction quality
 
-### Web Interface
-- **User Authentication**: Personal accounts with preferences
-- **Interactive Dashboard**: Visualize content trends and statistics
-- **Bookmarking System**: Save articles and add personal notes
-- **Reading History**: Track read articles for better recommendations
-- **Admin Controls**: Manage sources, users, and system settings
-
-## Requirements
-
-- Python 3.6+
-- Required libraries:
-  - Flask
-  - SQLAlchemy
-  - BeautifulSoup4
-  - Requests
-  - NLTK
-  - scikit-learn
-  - pandas
-  - Plotly
-  - feedparser
+### Command-Line Interface
+- **Comprehensive Commands**: Full access to all features through CLI
+- **Filtering Options**: Flexible content filtering by various criteria
+- **Export Capabilities**: Export content in multiple formats
+- **Health Monitoring**: Check the status and health of content sources
+- **Detailed Reporting**: Generate statistics and performance reports
 
 ## Installation
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/content-aggregator.git
-   cd content-aggregator
-   ```
+### Prerequisites
+- Python 3.6 or higher
+- pip (Python package manager)
 
-2. Install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
+### Dependencies
+The Content Aggregator requires several external libraries:
 
-3. Run initial setup:
-   ```
-   python setup.py
-   ```
+```bash
+pip install requests beautifulsoup4 feedparser nltk scikit-learn numpy joblib
+```
 
-4. Create or modify the configuration file (`config.json`):
-   ```json
-   {
-     "sources": [
-       {
-         "name": "Example News",
-         "type": "rss",
-         "url": "https://example.com/feed",
-         "categories": ["news", "technology"]
-       }
-     ],
-     "nlp_settings": {
-       "enabled": true,
-       "num_topics": 3,
-       "summary_sentences": 3
-     },
-     "deduplication": {
-       "enabled": true,
-       "similarity_threshold": 0.75
-     },
-     "adaptive_scraping": {
-       "enabled": true,
-       "respect_robots_txt": true,
-       "default_rate_limit": 5
-     }
-   }
-   ```
+NLTK data downloads will be attempted automatically when you first run the program, but you can manually download them with:
+
+```bash
+python -m nltk.downloader punkt stopwords vader_lexicon
+```
+
+### Setup
+1. Clone or download this repository
+2. Install the required dependencies
+3. Create a configuration file (optional, see Configuration section)
+4. Run the application
 
 ## Usage
 
-### Command Line Interface
+The Content Aggregator provides a command-line interface with multiple subcommands for different operations.
+
+### Basic Commands
 
 ```bash
 # Update content from all sources
 python content_aggregator.py update
 
-# List recent content
-python content_aggregator.py list --limit 10
+# List content with optional filters
+python content_aggregator.py list --limit 10 --sentiment positive
 
-# Export content to a file
-python content_aggregator.py export --output content.html --format html
+# Add a new source
+python content_aggregator.py add --name "Example News" --url "https://example.com/feed" --type rss
+```
 
-# Search content
-python content_aggregator.py list --keywords "python,data" --sentiment positive
+### Content Management
 
-# Run NLP analysis
+```bash
+# List content matching specific criteria
+python content_aggregator.py list --categories news,tech --keywords python,data
+python content_aggregator.py list --sentiment positive --source 2
+python content_aggregator.py list --min-sentiment 0.5 --similar-to 123
+
+# Export content to different formats
+python content_aggregator.py export --output articles.json --format json
+python content_aggregator.py export --output articles.csv --format csv
+python content_aggregator.py export --output articles.html --format html
+```
+
+### NLP Operations
+
+```bash
+# Get sentiment statistics
 python content_aggregator.py nlp sentiment
-python content_aggregator.py nlp topics
 
-# Manage deduplication
+# Extract top topics
+python content_aggregator.py nlp topics --limit 10
+
+# Generate or show summaries
+python content_aggregator.py nlp summarize --id 123
+python content_aggregator.py nlp summarize --limit 10
+
+# Process NLP on existing content
+python content_aggregator.py nlp process --force
+```
+
+### Deduplication
+
+```bash
+# Run deduplication process
 python content_aggregator.py dedup run
+
+# View deduplication statistics
 python content_aggregator.py dedup stats
 
-# Adaptive scraping commands
+# Find articles similar to a specific article
+python content_aggregator.py dedup similar --id 123
+```
+
+### Adaptive Scraping Management
+
+```bash
+# Check source status and scraping performance
 python content_aggregator.py adaptive status
+python content_aggregator.py adaptive status --id 2
+
+# Retrain selectors for a specific source
+python content_aggregator.py adaptive retrain --id 3
+
+# Analyze source health and get recommendations
 python content_aggregator.py adaptive health
+
+# Update robots.txt cache
+python content_aggregator.py adaptive robots
+
+# Train machine learning models
+python content_aggregator.py adaptive train
 ```
 
-### Web Interface
+## Configuration
 
-```bash
-# Start the web interface
-python run.py
-```
+The Content Aggregator can be configured using a JSON configuration file. If no configuration file is provided, default settings will be used.
 
-Then open a browser and navigate to http://localhost:5000
-
-## Web Interface Features
-
-- **Homepage**: View recent content customized to your preferences
-- **Search**: Advanced search functionality with multiple filters
-- **Dashboard**: Interactive charts showing content trends
-- **User Features**:
-  - Register and login
-  - Set content preferences
-  - Bookmark articles
-  - View reading history
-- **Admin Features**:
-  - Manage content sources
-  - Trigger content updates
-  - Monitor system health
-  - Manage users
-
-## Customization
-
-### Adding a Source
-
-```bash
-# Add an RSS feed
-python content_aggregator.py add --name "Tech News" --url "https://technews.com/feed" --type rss
-
-# Add a webpage to scrape
-python content_aggregator.py add --name "Tech Blog" --url "https://techblog.com" --type webpage
-```
-
-### Configure Source Scraping
-
-For webpage sources, you can specify CSS selectors in the configuration file:
+### Configuration File Example
 
 ```json
 {
   "sources": [
     {
-      "name": "Tech Blog",
+      "name": "TechNews",
+      "type": "rss",
+      "url": "https://technews.com/feed",
+      "categories": ["tech", "news"]
+    },
+    {
+      "name": "DataScience Blog",
       "type": "webpage",
-      "url": "https://techblog.com",
+      "url": "https://datascience-blog.com",
       "article_selector": "article.post",
-      "title_selector": "h1.title",
-      "content_selector": "div.content"
+      "title_selector": "h1.entry-title",
+      "content_selector": "div.entry-content",
+      "categories": ["data science", "programming"]
     }
-  ]
+  ],
+  "update_interval": 3600,
+  "max_articles_per_source": 10,
+  "keywords": ["python", "data science", "machine learning", "web development"],
+  "nlp_settings": {
+    "enabled": true,
+    "num_topics": 5,
+    "top_words_per_topic": 8,
+    "summary_sentences": 3,
+    "min_content_length": 100
+  },
+  "deduplication": {
+    "enabled": true,
+    "similarity_threshold": 0.75,
+    "exact_duplicates_only": false,
+    "title_weight": 0.3,
+    "content_weight": 0.7,
+    "check_within_days": 7
+  },
+  "adaptive_scraping": {
+    "enabled": true,
+    "learn_patterns": true,
+    "selector_feedback": true,
+    "fallback_to_generic": true,
+    "respect_robots_txt": true,
+    "default_rate_limit": 5
+  }
 }
 ```
 
-## Extending
+### Command-Line Configuration
 
-### Adding New Source Types
+You can specify a configuration file and database path when running the tool:
 
-The system is designed to be extensible. To add support for a new source type:
+```bash
+python content_aggregator.py --config my_config.json --db content_database.db [command]
+```
 
-1. Add a new method to the `ContentAggregator` class in `content_aggregator.py`
-2. Update the command-line interface in the `main()` function
-3. Add any necessary configuration options to the config file
+## Database
 
-### Adding New NLP Features
+The Content Aggregator uses SQLite to store content and metadata. The database includes tables for:
 
-To add new NLP capabilities:
+- Sources: Information about content sources
+- Content: The actual articles and their metadata
+- Keywords: Keywords for content filtering
+- Similarity groups: Groups of similar content
+- Scrape patterns: Extraction patterns for each source
+- Training data: Data for improving extraction quality
 
-1. Add methods to the `ContentAggregator` class
-2. Update the database schema to store new metadata
-3. Extend the CLI and web interface to expose the new features
+## Advanced Usage
 
-## Contributing
+### Managing Sources
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+The health of your content sources can be monitored and improved:
 
+```bash
+# Check source health and get recommendations
+python content_aggregator.py adaptive health
 
+# View detailed source status
+python content_aggregator.py adaptive status --id 2
+
+# Retrain a problematic source
+python content_aggregator.py adaptive retrain --id 3
+```
+
+### Analyzing Content
+
+Generate insights from your collected content:
+
+```bash
+# Get sentiment distribution
+python content_aggregator.py nlp sentiment
+
+# Find top topics across all content
+python content_aggregator.py nlp topics --limit 15
+
+# Find duplicates and similar content
+python content_aggregator.py dedup stats
+```
+
+## Extending the Tool
+
+The Content Aggregator is designed to be extensible:
+
+- Add new sources in the configuration file
+- Create custom extraction patterns for specific sites
+- Adjust NLP settings to better match your content
+- Tune deduplication parameters for optimal grouping
+
+## Troubleshooting
+
+### Common Issues
+
+- **Missing Dependencies**: Make sure you've installed all required libraries
+- **Extraction Failures**: Run `adaptive status` to check source health
+- **High Duplicate Rate**: Adjust similarity threshold in configuration
+- **Performance Issues**: Reduce max_articles_per_source or increase update_interval
+
+### Logs
+
+The Content Aggregator writes logs to `content_aggregator.log` that can help diagnose issues.
+
+## License
+
+This project is open source and available under the MIT License.
+
+## Acknowledgments
+
+- Beautiful Soup for HTML parsing
+- NLTK for natural language processing capabilities
+- scikit-learn for machine learning features
+- feedparser for RSS feed handling
